@@ -1,0 +1,102 @@
+---
+title: "Relational Data"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+weather
+
+```
+1. You would need to know the flights origin and destination. By combining the weather and airports tables you can obtain this information.
+2. The weather and airports share origin. The weather table also contains year, month, day, and hour.  The airports table also contains destination.
+3. The weather table would also need to contain the destination to know the weather for all airports in the USA.
+4. Month, day, and hour would probably be most important for finding what days would be less travelled.
+
+
+```{r}
+
+flights %>% count(year, month, day, flight) %>% filter(n > 1)
+
+```
+
+```{r}
+
+flights %>% mutate(surrogate = row_number())
+
+```
+
+2. a. Lahman  b. babynames  c. nasaweather  d. fueleconomy  e. ggplot2.
+
+```{r}
+
+library(Lahman)
+
+Master | Batting | Salaries
+---------------------------
+Player Names | Batting Statistics | Player Salary Data
+Dates of Birth |
+Dates of Death |
+Biographical Info |
+
+```
+3. The three tables use the same players but describe different data.
+
+
+```{r}
+
+flights2 <- flights %>%
+  select(year:day, hour, origin, dest, tailnum, carrier)
+flights2
+
+```
+
+```{r}
+
+flights2 %>% select(-origin, -dest) %>%
+  left_join(airlines, by = "carrier")
+
+```
+
+```{r}
+
+x <- tribble(
+  ~key, ~val_x,
+    1, "x1",
+    2, "x2",
+    2, "x2",
+    1, "x4"
+  )
+y <- tribble(
+  ~key, ~val_y,
+    1, "y1",
+    2, "y2"
+)
+left_join(x, y, by = "key")
+
+```
+
+
+```{r}
+
+flights2 %>%
+  left_join(planes, by = "tailnum")
+
+```
+
+```{r}
+
+airports %>%
+  semi_join(flights, c("faa" = "dest")) %>%
+  ggplot(aes(lon, lat)) +
+    borders("state") +
+    geom_point() +
+    coord_quickmap()
+
+```
+pg. 186
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
