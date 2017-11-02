@@ -87,16 +87,22 @@ flights2 %>%
 ```
 
 ```{r}
-
-airports %>%
-  semi_join(flights, c("faa" = "dest")) %>%
+flights %>%
+  group_by(dest) %>% 
+  summarize( avg = mean(flights)) %>%
+  semi_join(airports, c("dest" = "faa")) %>%
   ggplot(aes(lon, lat)) +
     borders("state") +
     geom_point() +
     coord_quickmap()
 
 ```
-pg. 186
+
+```{r}
+
+
+
+```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
